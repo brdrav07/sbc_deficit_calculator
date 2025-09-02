@@ -78,27 +78,33 @@ if (!dir.exists(outputs_folder)) {
 setwd("project_data/")
 
 # 1.4) Import data
-### TODO: Only import TD and RE base products as well as analogous and supplementation. Script updated to generate all other dependancies
+### TODO: Only import TD and RE base products as well as analogous and supplementation. Script updated to generate all other dependencies
 
-TD_WOS <- read.csv("inputs/TD_WOSv7.7_20250506.csv") # TODO: ensure this is up to date -----------------------------------------------------------> Updated on 06/05/25 with all trips to date
-# REDDv13 <- read.csv("inputs/REDD_v13_2023.csv") # TODO: ensure this is up to date
-RE_v14_2023 <- read.csv("inputs/v14/regional_ecosystem.csv") # TODO: ensure this is up to date
+TD_WOS <- read.csv("inputs/TD_WOSv7.7_20250506.csv") # TODO: ensure this is up to date ----------------------------> Updated on 06/05/25 with all trips to date
+RE_v14_2025 <- read.csv("inputs/v14/regional_ecosystem.csv") # TODO: ensure this is the latest version (v14)
 
-SBC_RE1_PC <- read.csv("inputs/v14/PRECLEARING_RE_V14_SBCfilter.csv") # TODO: ensure this is up to date
-REMNANT_RE_V13_ha <- read.csv("inputs/REMNANT_RE_V13_ha.csv") # TODO: ensure this is up to date
-PRECLEAR_RE_V13_ha <- read.csv("inputs/PRECLEAR_RE_V13_ha.csv") # TODO: ensure this is up to date
+RE_PC_v14 <- st_read("inputs/v14/preclear_v14_3577.gpkg") # TODO: read .gdb in QGIS and write as .gpkg
+RE_RE_v14 <- st_read("inputs/v14/remnant_v14_3577.gpkg") # TODO: read .gdb in QGIS and write as .gpkg
 
 SBC_RE_SUPP <- read.csv("inputs/SBC_supplementation_REV13.csv") # TODO: ensure this is up to date
-LRA_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/distance_100.parquet") # TODO: ensure this is up to date
-LRA_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/reference_data_100.parquet") # TODO: ensure this is up to date
-LRA_training <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/sampled_data_clean_100.parquet") # TODO: ensure this is up to date
-LRA_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_analogous/SEQBRBCQCMUL_analogous_REs_v1.0.csv") # TODO: ensure this is up to date
-LRR_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_replacement/distance_100.parquet") # TODO: ensure this is up to date
-LRR_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_replacement/reference_data_100.parquet") # TODO: ensure this is up to date
-LRR_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_replacement/SEQBRBCQCMUL_re_replacement_v1.0.csv") # TODO: ensure this is up to date
-LRC_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_combined/distance_100.parquet") # TODO: ensure this is up to date
-LRC_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_combined/reference_data_100.parquet") # TODO: ensure this is up to date
-LRC_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_combined/SEQBRBCQCMUL_combined_REs_v1.0.csv") # TODO: ensure this is up to date
+LRA_REs <- read.csv("inputs/SEQBRBCQCMUL_analogous_REs_v1.0.csv") # TODO: ensure this is up to date
+
+######
+# SBC_RE1_PC <- read.csv("inputs/v14/PRECLEARING_RE_V14_SBCfilter.csv") # TODO: ensure this is up to date
+# REMNANT_RE_V13_ha <- read.csv("inputs/REMNANT_RE_V13_ha.csv") # TODO: ensure this is up to date
+# PRECLEAR_RE_V13_ha <- read.csv("inputs/PRECLEAR_RE_V13_ha.csv") # TODO: ensure this is up to date
+# 
+# SBC_RE_SUPP <- read.csv("inputs/SBC_supplementation_REV13.csv") # TODO: ensure this is up to date
+# LRA_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/distance_100.parquet") # TODO: ensure this is up to date
+# LRA_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/reference_data_100.parquet") # TODO: ensure this is up to date
+# LRA_training <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_analogous/sampled_data_clean_100.parquet") # TODO: ensure this is up to date
+# LRA_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_analogous/SEQBRBCQCMUL_analogous_REs_v1.0.csv") # TODO: ensure this is up to date
+# LRR_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_replacement/distance_100.parquet") # TODO: ensure this is up to date
+# LRR_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_replacement/reference_data_100.parquet") # TODO: ensure this is up to date
+# LRR_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_replacement/SEQBRBCQCMUL_re_replacement_v1.0.csv") # TODO: ensure this is up to date
+# LRC_distance <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_combined/distance_100.parquet") # TODO: ensure this is up to date
+# LRC_reference <- read_parquet("inputs/2021_BRB-CQC-MUL-SEQ_combined/reference_data_100.parquet") # TODO: ensure this is up to date
+# LRC_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_combined/SEQBRBCQCMUL_combined_REs_v1.0.csv") # TODO: ensure this is up to date
 
 ##### 2) Data processing #####                                                                                                                                                                    
 # ██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗
@@ -112,28 +118,29 @@ LRC_REs <- read.csv("inputs/2021_BRB-CQC-MUL-SEQ_combined/SEQBRBCQCMUL_combined_
 # ██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗██╗
 # ╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝╚═╝
                                                                                                                                                                    
-
-#----------------------------------------------------------------------------------------------------------------------#
-#----------------------------------------------- 2) Data manipulation -------------------------------------------------#
-#----------------------------------------------------------------------------------------------------------------------#
-
-# 2.1) Manipulate dataframes
+# 2.1) Manipulate training data and region ecosystem dataframes
 TD_WOS <- TD_WOS %>%
   mutate(temp = V13_RE) %>%
   separate(temp, into = c("BR_code", "LZ_code", "VC_code"), sep = "\\.")
-RE_v13_2023 <- RE_v13_2023 %>%
+RE_v14_2025 <- RE_v14_2025 %>%
   mutate(temp = NAME) %>%
   separate(temp, into = c("BR_code", "LZ_code", "VC_code"), sep = "\\.") %>%
   mutate(temp = MAPPED_EXTENTS) %>%
   separate(temp, into = c("PRECLEAR_ha", "REMNANT_ha"), sep = "\\;")
-RE_v13_2023$PRECLEAR_ha <- as.numeric(gsub("[^0-9]", "", RE_v13_2023$PRECLEAR_ha))
-RE_v13_2023$REMNANT_ha <- as.numeric(gsub("2021|[^0-9]", "", RE_v13_2023$REMNANT_ha))
+RE_v14_2025$PRECLEAR_ha <- as.numeric(gsub("[^0-9]", "", RE_v14_2025$PRECLEAR_ha))
+RE_v14_2025$REMNANT_ha <- as.numeric(gsub("2023|[^0-9]", "", RE_v14_2025$REMNANT_ha))
 
 # remove columns 2 to 4 to align with analogous df format, and add supp and analogous to form combined REs
 QLD_RE_SUPP <- SBC_RE_SUPP[, -c(2:4)]
 SuppAna_REs <- rbind(LRA_REs, QLD_RE_SUPP)
 
 # Group SBC filtered RE1 polygons into RE1 groups (QLDv13 = 2705 RE1s) to be modelled
+
+#
+RE_PC_v14 <- RE_PC_v14 %>%
+  mutate(temp = RE1) %>%
+  separate(temp, into = c("BR_code", "LZ_code", "VC_code"), sep = "\\.")
+
 SBC_RE1_PC_GROUPED <- SBC_RE1_PC %>%
   group_by(RE1) %>%
   summarize(across(everything(), list))
