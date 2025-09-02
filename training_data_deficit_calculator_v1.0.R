@@ -52,7 +52,8 @@ for (pkg in packages) {
 }
 lapply(packages, library, character.only = TRUE)
 
-####################################################### FIXME: Update the file paths to stop creating project_data loop#########################################
+########## FIXME: Update the file paths to stop creating project_data loop#########################################
+
 # 1.3) Create directories and set wd
 main_folder <- "project_data"
 inputs_folder <- file.path(main_folder, "inputs")
